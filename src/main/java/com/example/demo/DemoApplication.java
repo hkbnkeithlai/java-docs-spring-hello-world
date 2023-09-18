@@ -27,11 +27,11 @@ import java.security.cert.X509Certificate;
 @RestController
 public class DemoApplication {
 
-	@Value("${MULE_BASIC_TOKEN}")
-	private String token;
-
-	@Value("${MULEAPI_ENDPOINT}")
-	private String muleapiUrl;
+//	@Value("${MULE_BASIC_TOKEN}")
+//	private String token;
+//
+//	@Value("${MULEAPI_ENDPOINT}")
+//	private String muleapiUrl;
 	Logger logger = LogManager.getLogger(DemoApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -47,7 +47,7 @@ public class DemoApplication {
 		String response = "";
 		String result = "";
 		//	HttpClient httpClient ;
-		Header oauthHeader = new BasicHeader("Authorization", "Basic " + token);
+		Header oauthHeader = new BasicHeader("Authorization", "Basic YTNiOGM1YWE4NDNhNDdmMzk3MDU4YzI0ZGE5NWU0YTk6RjU3YWU4NjQ0YzllNDZlNjlhMjA2RUNlODhkMjA4NzM=");
 		Header prettyPrintHeader = new BasicHeader("X-PrettyPrint", "1");
 		try {
 
@@ -61,7 +61,7 @@ public class DemoApplication {
 						public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
 					}
 			};
-			HttpGet createHttpGet = new HttpGet(muleapiUrl);
+			HttpGet createHttpGet = new HttpGet("https://192.168.237.80/api/sys/healthcheck/v1/healthcheck");
 			createHttpGet.addHeader(oauthHeader);
 			createHttpGet.addHeader(prettyPrintHeader);
 			//httpClient = HttpClientBuilder.create().build();
