@@ -3,7 +3,9 @@ package com.example.demo;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
@@ -42,7 +44,7 @@ public class DemoApplication {
 	String sayHello() {
 		return "Hello World!, Read Azure application setting <br> muleapiurl: "
 				+ muleapiUrl
-				+ "<a href='/mule'>click here to test</a>"
+				+ "<br><a href='/mule'>click here to test</a>"
 				;
 	}
 	@RequestMapping("/mule")
@@ -65,15 +67,29 @@ public class DemoApplication {
 						public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
 					}
 			};
-			HttpGet createHttpGet = new HttpGet(muleapiUrl);
-			createHttpGet.addHeader(oauthHeader);
-			createHttpGet.addHeader(prettyPrintHeader);
+		//	HttpGet createHttpGet = new HttpGet(muleapiUrl);
+			HttpPost httpPost = new HttpPost(muleapiUrl);
+			httpPost.addHeader(oauthHeader);
+			httpPost.addHeader(prettyPrintHeader);
+
+			httpPost.setHeader("Accept", "application/json");
+			httpPost.setHeader("Content-type", "application/json; charset=UTF-8");
+
 			//httpClient = HttpClientBuilder.create().build();
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, trustAllCerts, new SecureRandom());
 			CloseableHttpClient httpClient = HttpClients.custom().setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSSLContext(sc).build();
+			httpPost.setEntity(new StringEntity("{\n" +
+					"    \"action\": \"SELECT\",\n" +
+					"    \"parameter\": {\n" +
+					"        \"pps\": \"000582142\",\n" +
+					"        \"start\": 0,\n" +
+					"        \"size\": 100\n" +
+					"    }\n" +
+					"}", "UTF-8"));
 
-			HttpResponse upsertResponse = httpClient.execute(createHttpGet);
+
+			HttpResponse upsertResponse = httpClient.execute(httpPost);
 			response = EntityUtils.toString(upsertResponse.getEntity());
 			result = response ;
 			//result = response + " " + properties.getMessage();
