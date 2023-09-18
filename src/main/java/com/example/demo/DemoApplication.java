@@ -40,7 +40,9 @@ public class DemoApplication {
 
 	@RequestMapping("/")
 	String sayHello() {
-		return "Hello World!, Read Azure application setting";
+		return "Hello World!, Read Azure application setting <br> muleapiurl:"
+				+ muleapiUrl
+				;
 	}
 	@RequestMapping("/mule")
 	public String callHealtCheckAPI() throws Exception {
