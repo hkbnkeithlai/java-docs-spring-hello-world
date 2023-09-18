@@ -40,8 +40,9 @@ public class DemoApplication {
 
 	@RequestMapping("/")
 	String sayHello() {
-		return "Hello World!, Read Azure application setting <br> muleapiurl:"
+		return "Hello World!, Read Azure application setting <br> muleapiurl: "
 				+ muleapiUrl
+				+ "<a href='/mule'>click here to test</a>"
 				;
 	}
 	@RequestMapping("/mule")
