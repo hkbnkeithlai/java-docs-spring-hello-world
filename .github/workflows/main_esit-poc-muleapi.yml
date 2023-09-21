@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'esit-poc-muleapi'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B3B728D21B534466A43D1FAD608A5E77 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_92E1D055C8AF466DBDDD3D8F8700B68C }}
           package: '*.jar'
