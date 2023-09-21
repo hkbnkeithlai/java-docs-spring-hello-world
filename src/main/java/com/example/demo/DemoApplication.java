@@ -33,7 +33,7 @@ public class DemoApplication {
 	private String token;
 
 	
-	@Value("${Development_Slot}")
+	@Value("${DEVELOPMENT_SLOT}")
 	private String devslot;
 
 	@Value("${MULEAPI_ENDPOINT}")
