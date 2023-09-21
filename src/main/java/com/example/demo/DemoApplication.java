@@ -32,6 +32,10 @@ public class DemoApplication {
 	@Value("${MULE_BASIC_TOKEN}")
 	private String token;
 
+	
+	@Value("${Development_Slot}")
+	private String devslot;
+
 	@Value("${MULEAPI_ENDPOINT}")
 	private String muleapiUrl;
 
@@ -43,7 +47,8 @@ public class DemoApplication {
 	@RequestMapping("/")
 	String sayHello() {
 		return "Hello World!, Read Azure application setting <br> muleapiurl: "
-				+ muleapiUrl
+				+ "<br>" + devslot 
+				+ "<br>" + muleapiUrl
 				+ "<br><a href='/mule'>click here to test</a>"
 				;
 	}
