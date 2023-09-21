@@ -32,6 +32,8 @@ public class DemoApplication {
 	@Value("${MULE_BASIC_TOKEN}")
 	private String token;
 
+	@Value("${DEVELOPMENT_SLOT}")
+	private String devslot;
 	@Value("${MULEAPI_ENDPOINT}")
 	private String muleapiUrl;
 
@@ -42,14 +44,15 @@ public class DemoApplication {
 
 	@RequestMapping("/")
 	String sayHello() {
-		return "Hello World!, Read Azure application setting <br> muleapiurl: "
-				+ muleapiUrl
+		return "Read Azure application setting <br> muleapiurl: "
+ 				+ muleapiUrl
+				+ "<br>Development Slot: " + devslot
 				+ "<br><a href='/mule'>click here to test</a>"
 				;
 	}
 	@RequestMapping("/mule")
 	public String callHealtCheckAPI() throws Exception {
-
+		logger.info("/mule");
 		String response = "";
 		String result = "";
 		//	HttpClient httpClient ;
@@ -67,18 +70,14 @@ public class DemoApplication {
 						public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
 					}
 			};
+
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new SecureRandom());
+
 		//	HttpGet createHttpGet = new HttpGet(muleapiUrl);
 			HttpPost httpPost = new HttpPost(muleapiUrl);
 			httpPost.addHeader(oauthHeader);
 			httpPost.addHeader(prettyPrintHeader);
-
-			httpPost.setHeader("Accept", "application/json");
-			httpPost.setHeader("Content-type", "application/json; charset=UTF-8");
-
-			//httpClient = HttpClientBuilder.create().build();
-			SSLContext sc = SSLContext.getInstance("SSL");
-			sc.init(null, trustAllCerts, new SecureRandom());
-			CloseableHttpClient httpClient = HttpClients.custom().setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSSLContext(sc).build();
 			httpPost.setEntity(new StringEntity("{\n" +
 					"    \"action\": \"SELECT\",\n" +
 					"    \"parameter\": {\n" +
@@ -87,6 +86,12 @@ public class DemoApplication {
 					"        \"size\": 100\n" +
 					"    }\n" +
 					"}", "UTF-8"));
+			httpPost.setHeader("Accept", "application/json");
+			httpPost.setHeader("Content-type", "application/json; charset=UTF-8");
+
+			//httpClient = HttpClientBuilder.create().build();
+
+			CloseableHttpClient httpClient = HttpClients.custom().setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSSLContext(sc).build();
 
 
 			HttpResponse upsertResponse = httpClient.execute(httpPost);
