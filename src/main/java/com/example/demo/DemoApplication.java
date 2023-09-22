@@ -47,6 +47,7 @@ public class DemoApplication {
 		return "Read Azure application setting <br> muleapiurl: "
  				+ muleapiUrl
 				+ "<br>Development Slot: " + devslot
+				+ "<br>timestamp: 16:55"
 				+ "<br><a href='/mule'>click here to test</a>"
 				;
 	}
