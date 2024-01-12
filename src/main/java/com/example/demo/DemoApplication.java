@@ -1,5 +1,11 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.applicationinsights.core.dependencies.google.gson.Gson;
+import com.microsoft.applicationinsights.core.dependencies.google.gson.GsonBuilder;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -12,11 +18,12 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -24,6 +31,7 @@ import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 
 @SpringBootApplication
 @RestController
@@ -47,9 +55,16 @@ public class DemoApplication {
 		return "Read Azure application setting <br> muleapiurl: "
  				+ muleapiUrl
 				+ "<br>Development Slot: " + devslot
-				+ "<br>timestamp: 16:55"
+				+ "<br>timestamp: 1"
 				+ "<br><a href='/mule'>click here to test</a>"
-				;
+				+ "<br><form method=\"post\" action=\"/unsubscribe/hkbnes\">"
+				+"<label for=\"firstname\">First name:</label>"
+				+"<input type=\"text\" name=\"firstname\" /><br />"
+				+" <label for=\"lastname\">Last name:</label>"
+				+"<input type=\"text\" name=\"lastname\" /><br />"
+				+"<input type=\"submit\" />"
+				+"</form>"
+			;
 	}
 	@RequestMapping("/mule")
 	public String callHealtCheckAPI() throws Exception {
@@ -107,4 +122,91 @@ public class DemoApplication {
 		}
 		return result ;
 	}
+
+
+
+	@RestController
+	public class UnsubscribeController {
+
+		@PostMapping("/unsubscribe/hkbnes")
+		public void unsubscribe(@RequestBody String payload) {
+			logger.info("Received payload: " + payload);
+			System.out.println("Received payload: " + payload);
+		}
+	}
+
+	@Autowired
+	private ObjectMapper objectMapper;
+
+	@GetMapping("/t")
+	public String test() throws Exception {
+
+		class RestResp {
+
+			public ResponseEntity<?> data = null;
+		}
+
+
+		String result = "{\"name\":\"Alex\"}";
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode node = mapper.readTree(result);
+
+		RestResp response = new RestResp();
+		response.data = ResponseEntity.ok().body(node);
+		Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+		String jsonobject = gson.toJson(node);
+
+
+
+		return jsonobject;
+
+	}
+	@GetMapping("/presales/{hkbnes_presales_id}")
+	public String getPreSalesRequest(@PathVariable Long hkbnes_presales_id) throws StreamReadException, DatabindException, IOException {
+		String json = "{\r\n" +
+				"    \"htcl_presales_id\": \"20230119N\",\r\n" +
+				"    \"htcl_sales_email\": \"sales@example.com\",\r\n" +
+				"    \"htcl_sales_name\": \"John Doe\",\r\n" +
+				"    \"htcl_sales_contact\": \"12345678\",\r\n" +
+				"    \"address_code\": \"123456\",\r\n" +
+				"    \"flat_room_unit\": \"Unit 123\",\r\n" +
+				"    \"floor\": \"5\",\r\n" +
+				"    \"block\": \"A\",\r\n" +
+				"    \"building_name\": \"ABC Building\",\r\n" +
+				"    \"street\": \"Main Street\",\r\n" +
+				"    \"area\": \"Central\",\r\n" +
+				"    \"district\": \"Hong Kong\",\r\n" +
+				"    \"service\": \"Broadband\",\r\n" +
+				"    \"plan_code\": \"BB1GDIP\",\r\n" +
+				"    \"plan_desc\": \"1000Mbps (1 Dynamic IP)\",\r\n" +
+				"    \"end_user_name\": \"XYZ Company\",\r\n" +
+				"    \"site_contact_person\": \"Jane Smith\",\r\n" +
+				"    \"site_contact_number\": \"98765432\",\r\n" +
+				"    \"site_visit_date\": \"2023-10-20\",\r\n" +
+				"    \"site_visit_time_slot\": \"AM (09:00-12:30)\",\r\n" +
+				"    \"htcl_remarks\": \"Special request for additional equipment\",\r\n" +
+				"    \"htcl_request_status\": \"Submitted\",\r\n" +
+				"    \"hkbnes_address_code\": \"123456\",\r\n" +
+				"    \"hkbnes_building_name\": \"ABC Building\",\r\n" +
+				"    \"hkbnes_street\": \"Main Street\",\r\n" +
+				"    \"hkbnes_area\": \"Central\",\r\n" +
+				"    \"hkbnes_district\": \"Hong Kong\",\r\n" +
+				"    \"hkbnes_remark\": \"Additional notes from HKBN\",\r\n" +
+				"    \"hkbnes_under_coverage\": true,\r\n" +
+				"    \"hkbnes_site_visit\": false,\r\n" +
+				"    \"hkbnes_additional_charge\": null,\r\n" +
+				"    \"hkbnes_status\": \"Open\",\r\n" +
+				"    \"create_datetime\": \"2023-10-19 10:00:00\",\r\n" +
+				"    \"last_modified_datetime\": \"2023-10-19 14:30:00\"\r\n" +
+				"}";
+
+		Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+		String jsonobject = gson.toJson(objectMapper.readValue(json, Map.class));
+
+
+		return jsonobject;
+		//return ResponseEntity.ok().body(RestResponse.success(formService.getExistingLineDetail(cusPlanCode)));
+	}
+
+
 }
