@@ -173,10 +173,7 @@ public class DemoApplication {
 			"<!--  ----------------------------------------------------------------------  -->\n" +
 			"\n" +
 			"<META HTTP-EQUIV=\"Content-type\" CONTENT=\"text/html; charset=UTF-8\">\n" +
-			"<script src=\"https://www.google.com/recaptcha/api.js\"></script>\n" +
-			"<script>\n" +
-			" function timestamp() { var response = document.getElementById(\"g-recaptcha-response\"); if (response == null || response.value.trim() == \"\") {var elems = JSON.parse(document.getElementsByName(\"captcha_settings\")[0].value);elems[\"ts\"] = JSON.stringify(new Date().getTime());document.getElementsByName(\"captcha_settings\")[0].value = JSON.stringify(elems); } } setInterval(timestamp, 500); \n" +
-			"</script>\n" +
+	
 			"\n" +
 			"<!--  ----------------------------------------------------------------------  -->\n" +
 			"<!--  NOTE: Please add the following <FORM> element to your page.             -->\n" +
@@ -184,16 +181,8 @@ public class DemoApplication {
 			"\n" +
 			"<form action=\"https://hkbn--escrmuat.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00D0k000000EJLl\" method=\"POST\">\n" +
 			"\n" +
-			"<input type=hidden name='captcha_settings' value='{\"keyname\":\"googlerecaptchakey_esaio\",\"fallback\":\"true\",\"orgId\":\"00D0k000000EJLl\",\"ts\":\"\"}'>\n" +
 			"<input type=hidden name=\"orgid\" value=\"00D0k000000EJLl\">\n" +
 			"<input type=hidden name=\"retURL\" value=\"http://demoapp.itpoc.dev\">\n" +
-			"\n" +
-			"<!--  ----------------------------------------------------------------------  -->\n" +
-			"<!--  NOTE: These fields are optional debugging elements. Please uncomment    -->\n" +
-			"<!--  these lines if you wish to test in debug mode.                          -->\n" +
-			"<!--  <input type=\"hidden\" name=\"debug\" value=1>                              -->\n" +
-			"<!--  <input type=\"hidden\" name=\"debugEmail\" value=\"keith.lai@hkbn.com.hk\">   -->\n" +
-			"<!--  ----------------------------------------------------------------------  -->\n" +
 			"\n" +
 			"<label for=\"name\">Contact Name</label><input  id=\"name\" maxlength=\"80\" name=\"name\" size=\"20\" type=\"text\" /><br>\n" +
 			"\n" +
@@ -207,7 +196,6 @@ public class DemoApplication {
 			"\n" +
 			"<input type=\"hidden\"  id=\"external\" name=\"external\" value=\"1\" /><br>\n" +
 			"\n" +
-			"<div class=\"g-recaptcha\" data-sitekey=\"6Ldlv6QpAAAAAERvh9vPWR9js9RZu-5NwUgZeLvg\"></div><br>\n" +
 			"<input type=\"submit\" name=\"submit\">\n" +
 			"\n" +
 			"</form>\n";
